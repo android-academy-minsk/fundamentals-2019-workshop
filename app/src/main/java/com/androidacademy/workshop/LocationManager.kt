@@ -13,8 +13,8 @@ class LocationManager(context: Context?, val callBack: (Location) -> Unit) {
     private var locationManager: LocationManager? = null
 
     private val locationListener = object : LocationListener {
-        override fun onLocationChanged(p0: Location?) {
-            p0?.let { callBack(it) }
+        override fun onLocationChanged(location: Location?) {
+            location?.let { callBack(it) }
         }
 
         override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {

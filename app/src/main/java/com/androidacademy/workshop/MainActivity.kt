@@ -5,12 +5,15 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import com.androidacademy.workshop.data.MovieRoomDatabase
+import com.androidacademy.workshop.data.Repository
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Repository.movieDatabase = MovieRoomDatabase.getDatabase(this)
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -52,7 +55,6 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.flContainer, MainFragment())
-            .addToBackStack(null)
             .commit()
     }
 }
