@@ -6,10 +6,10 @@ object Repository {
     var movieDatabase: MovieRoomDatabase? = null
 
     fun getMovieFromDb(): List<Movie> {
-        return emptyList<Movie>()
+        return movieDatabase?.movieDao()?.getMovies() ?: emptyList()
     }
 
-    fun listMovies(): List<Movie> {
+    fun loadMovies(): List<Movie> {
         return DataStorage.getMoviesList()
     }
 

@@ -12,7 +12,8 @@ abstract class MovieRoomDatabase : RoomDatabase() {
     abstract fun movieDao(): MovieDao?
 
     companion object {
-        const val MOVIE_TABLE = "movies_table"
+
+        const val MOVIE_TABLE = "movie_table"
 
         @Volatile
         private var INSTANCE: MovieRoomDatabase? = null
@@ -24,16 +25,13 @@ abstract class MovieRoomDatabase : RoomDatabase() {
                         INSTANCE = Room.databaseBuilder<MovieRoomDatabase>(
                             context.applicationContext,
                             MovieRoomDatabase::class.java, MOVIE_TABLE
-                        ).createFromAsset("movie_table.db")
+                        )
+                            .createFromAsset("movies.db")
                             .build()
                     }
                 }
             }
             return INSTANCE
         }
-
-
     }
-
-
 }

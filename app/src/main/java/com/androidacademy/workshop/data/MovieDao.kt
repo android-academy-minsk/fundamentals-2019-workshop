@@ -9,7 +9,7 @@ import androidx.room.Query
 @Dao
 interface MovieDao {
 
-    @Query("SELECT * from movies_table")
+    @Query("SELECT * from movie_table")
     fun getMovies(): List<Movie>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
