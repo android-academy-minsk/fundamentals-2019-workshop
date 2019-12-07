@@ -7,12 +7,12 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_main.*
 
 
-class MainFragment : Fragment() {
-
+class MainFragment : Fragment(), MenuItem.OnMenuItemClickListener {
     private var locationManager: LocationManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setHasOptionsMenu(true)
     }
 
@@ -26,37 +26,50 @@ class MainFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        locationManager = LocationManager(context!!) { location ->
+
+        locationManager = LocationManager(requireContext()) { location ->
             print(location)
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+
         inflater.inflate(R.menu.menu_next, menu)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.menuNext).setOnMenuItemClickListener {
-            return@setOnMenuItemClickListener fragmentManager?.let {
-                it
-                    .beginTransaction()
-                    .replace(R.id.flContainer, MoviesFragment())
-                    .addToBackStack(null)
-                    .commit()
-                true
-            } ?: false
+
+        val menuItem = menu.findItem(R.id.menuNext)
+        menuItem?.setOnMenuItemClickListener(this)
+    }
+
+    override fun onMenuItemClick(menuItem: MenuItem): Boolean {
+        return when (menuItem.itemId) {
+            R.id.menuNext -> {
+                fragmentManager
+                    ?.beginTransaction()
+                    ?.replace(R.id.flContainer, MoviesFragment())
+                    ?.addToBackStack(null)
+                    ?.commit()
+
+                return true
+            }
+            else -> false
         }
     }
 
+
     override fun onStart() {
         super.onStart()
+
         locationManager?.start()
     }
 
     override fun onStop() {
         super.onStop()
+
         locationManager?.stop()
     }
 
