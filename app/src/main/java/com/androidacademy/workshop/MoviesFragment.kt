@@ -7,21 +7,25 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.androidacademy.workshop.adapter.MoviesAdapter
 import com.androidacademy.workshop.data.Movie
+import com.androidacademy.workshop.data.MovieRoomDatabase
+import com.androidacademy.workshop.data.Repository
 import kotlinx.android.synthetic.main.activity_movies.*
 
 
-class MoviesFragment : Fragment(), Observer<List<Movie>> {
-
+class MoviesFragment : Fragment(), Observer<List<Movie>>, MenuItem.OnMenuItemClickListener {
     private lateinit var movieViewModel: MoviesViewModel
-    private lateinit var adapter: MoviesAdapter
 
+    private lateinit var adapter: MoviesAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setHasOptionsMenu(true)
-//        activity?.run {
-//            movieViewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
-//        }?: throw Exception("Invalid Activity")
-        movieViewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
+
+        val factory = MovieViewModelFactory(
+            Repository(MovieRoomDatabase.getDatabase(requireContext()))
+        )
+        movieViewModel = ViewModelProviders.of(requireActivity(), factory)
+            .get(MoviesViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -34,15 +38,14 @@ class MoviesFragment : Fragment(), Observer<List<Movie>> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = MoviesAdapter(
-            context!!
-        ) { position ->
-        }
+
+        adapter = MoviesAdapter(requireContext()) { position -> Unit }
         moviesList.adapter = adapter
     }
 
     override fun onStart() {
         super.onStart()
+
         movieViewModel.observeMovies().observe(viewLifecycleOwner, this)
     }
 
@@ -52,20 +55,27 @@ class MoviesFragment : Fragment(), Observer<List<Movie>> {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
+
         inflater.inflate(R.menu.menu_sort, menu)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         super.onPrepareOptionsMenu(menu)
-        menu.findItem(R.id.menuSort).setOnMenuItemClickListener {
-            return@setOnMenuItemClickListener fragmentManager?.let {
-                it
-                    .beginTransaction()
-                    .replace(R.id.flContainer, EditFragment())
-                    .addToBackStack(null)
-                    .commit()
+
+        menu.findItem(R.id.menuSort).setOnMenuItemClickListener(this)
+    }
+
+    override fun onMenuItemClick(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menuSort -> {
+                fragmentManager?.beginTransaction()
+                    ?.replace(R.id.flContainer, EditFragment())
+                    ?.addToBackStack(null)
+                    ?.commit()
+
                 true
-            } ?: false
+            }
+            else -> false
         }
     }
 }

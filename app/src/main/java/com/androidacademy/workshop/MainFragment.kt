@@ -54,7 +54,7 @@ class MainFragment : Fragment(), MenuItem.OnMenuItemClickListener {
                     ?.addToBackStack(null)
                     ?.commit()
 
-                return true
+                true
             }
             else -> false
         }

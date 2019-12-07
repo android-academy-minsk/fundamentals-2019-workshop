@@ -10,7 +10,7 @@ private const val DB_FILE_NAME = "movies.db"
 @Database(entities = [Movie::class], version = 1, exportSchema = false)
 abstract class MovieRoomDatabase : RoomDatabase() {
 
-    abstract fun movieDao(): MovieDao?
+    abstract fun movieDao(): MovieDao
 
     companion object {
 

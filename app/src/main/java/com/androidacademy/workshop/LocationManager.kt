@@ -3,27 +3,16 @@ package com.androidacademy.workshop
 import android.content.Context
 import android.content.Context.LOCATION_SERVICE
 import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Bundle
 
 
 class LocationManager(context: Context?, val callBack: (Location) -> Unit) {
 
     private var locationManager: LocationManager? = null
 
-    private val locationListener = object : LocationListener {
+    private val locationListener = object : SimpleLocationListener() {
         override fun onLocationChanged(location: Location?) {
-            location?.let { callBack(it) }
-        }
-
-        override fun onStatusChanged(p0: String?, p1: Int, p2: Bundle?) {
-        }
-
-        override fun onProviderEnabled(p0: String?) {
-        }
-
-        override fun onProviderDisabled(p0: String?) {
+            location?.let { nonNullLocation -> callBack(nonNullLocation) }
         }
     }
 
@@ -41,6 +30,4 @@ class LocationManager(context: Context?, val callBack: (Location) -> Unit) {
     fun stop() {
         locationManager?.removeUpdates(locationListener)
     }
-
-
 }

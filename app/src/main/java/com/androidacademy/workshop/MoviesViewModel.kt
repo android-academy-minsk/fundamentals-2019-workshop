@@ -10,12 +10,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class MoviesViewModel : ViewModel() {
+class MoviesViewModel(private val repository: Repository) : ViewModel() {
 
     private val movies = MutableLiveData<List<Movie>>()
 
     init {
-        movies.value = Repository.loadMovies()
+        movies.value = repository.loadMovies()
     }
 
     fun observeMovies(): LiveData<List<Movie>> {
@@ -36,9 +36,7 @@ class MoviesViewModel : ViewModel() {
 
     fun loadMovies() {
         viewModelScope.launch(context = Dispatchers.IO) {
-            movies.postValue(Repository.getMovieFromDb())
+            movies.postValue(repository.getMovieFromDb())
         }
     }
-
-
 }

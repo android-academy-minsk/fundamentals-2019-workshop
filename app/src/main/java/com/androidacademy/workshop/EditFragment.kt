@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.androidacademy.workshop.data.MovieRoomDatabase
+import com.androidacademy.workshop.data.Repository
 import kotlinx.android.synthetic.main.fragment_edit.*
 
 
@@ -24,21 +26,23 @@ class EditFragment : Fragment(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activity?.run {
-            movieViewModel = ViewModelProviders.of(this).get(MoviesViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
+
+        val factory = MovieViewModelFactory(
+            Repository(MovieRoomDatabase.getDatabase(requireContext()))
+        )
+        movieViewModel = ViewModelProviders.of(requireActivity(), factory)
+            .get(MoviesViewModel::class.java)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        rgSorting.children.forEach {
-            it.setOnClickListener(this)
-        }
+        rgSorting.children
+            .forEach { view -> view.setOnClickListener(this) }
     }
 
-    override fun onClick(p0: View?) {
-        when (p0?.id) {
+    override fun onClick(view: View) {
+        when (view.id) {
             R.id.rBtnSortName -> {
                 movieViewModel.sortByName()
             }
