@@ -2,15 +2,12 @@ package com.androidacademy.workshop
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.androidacademy.workshop.data.Movie
 import com.androidacademy.workshop.data.Repository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
-class MoviesViewModel(private val repository: Repository) : ViewModel() {
+class MoviesViewModel(private val repository: Repository) {
 
     private val movies = MutableLiveData<List<Movie>>()
 
@@ -34,9 +31,9 @@ class MoviesViewModel(private val repository: Repository) : ViewModel() {
         movies.value = movies.value?.sortedBy { it.releaseDate }
     }
 
-    fun loadMovies() {
-        viewModelScope.launch(context = Dispatchers.IO) {
-            movies.postValue(repository.getMovieFromDb())
-        }
-    }
+//    fun loadMovies() {
+//        viewModelScope.launch(context = Dispatchers.IO) {
+//            movies.postValue(repository.getMovieFromDb())
+//        }
+//    }
 }

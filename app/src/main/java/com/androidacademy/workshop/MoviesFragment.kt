@@ -18,14 +18,7 @@ class MoviesFragment : Fragment(), Observer<List<Movie>>, MenuItem.OnMenuItemCli
     private lateinit var adapter: MoviesAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setHasOptionsMenu(true)
-
-        val factory = MovieViewModelFactory(
-            Repository(MovieRoomDatabase.getDatabase(requireContext()))
-        )
-        movieViewModel = ViewModelProviders.of(requireActivity(), factory)
-            .get(MoviesViewModel::class.java)
     }
 
     override fun onCreateView(
