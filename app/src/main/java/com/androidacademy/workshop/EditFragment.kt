@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import com.androidacademy.workshop.data.MovieRoomDatabase
 import com.androidacademy.workshop.data.Repository
 import kotlinx.android.synthetic.main.fragment_edit.*
 
@@ -15,16 +16,22 @@ class EditFragment : Fragment(), View.OnClickListener {
 
     private lateinit var movieViewModel: MoviesViewModel
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val factory = MovieViewModelFactory(
+            Repository(MovieRoomDatabase.getDatabase(requireContext()))
+        )
+        movieViewModel = ViewModelProviders.of(requireActivity(), factory)
+            .get(MoviesViewModel::class.java)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_edit, container, false)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
