@@ -8,7 +8,6 @@ import com.androidacademy.workshop.data.Movie
 import com.androidacademy.workshop.data.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 
 class MoviesViewModel(private val repository: Repository) : ViewModel() {
