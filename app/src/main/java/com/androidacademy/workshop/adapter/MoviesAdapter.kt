@@ -1,6 +1,5 @@
 package com.androidacademy.workshop.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,18 +7,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.androidacademy.workshop.R
 import com.androidacademy.workshop.data.Movie
 
 class MoviesAdapter(
-    context: Context,
     private val clickListener: (position: Int) -> Unit
 ) : ListAdapter<Movie, MoviesAdapter.ViewHolder>(MovieDiffUtil()) {
 
-
-    private val inflater: LayoutInflater = LayoutInflater.from(context)
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val inflater: LayoutInflater = LayoutInflater.from(parent.context)
         return ViewHolder(
             inflater.inflate(
                 R.layout.item_movie,
@@ -53,7 +50,7 @@ class MoviesAdapter(
         }
 
         fun bind(movie: Movie) {
-            poster.setImageResource(movie.posterRes)
+            poster.load(movie.posterUrl)
             title.text = movie.title
             overview.text = movie.overview
         }

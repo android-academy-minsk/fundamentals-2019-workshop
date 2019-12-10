@@ -8,6 +8,7 @@ import com.androidacademy.workshop.data.Movie
 import com.androidacademy.workshop.data.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class MoviesViewModel(private val repository: Repository) : ViewModel() {
@@ -15,7 +16,7 @@ class MoviesViewModel(private val repository: Repository) : ViewModel() {
     private val movies = MutableLiveData<List<Movie>>()
 
     init {
-        movies.value = repository.loadMovies()
+        loadMovies()
     }
 
     fun observeMovies(): LiveData<List<Movie>> {
@@ -35,8 +36,10 @@ class MoviesViewModel(private val repository: Repository) : ViewModel() {
     }
 
     fun loadMovies() {
-        viewModelScope.launch(context = Dispatchers.IO) {
-            movies.postValue(repository.getMovieFromDb())
+        viewModelScope.launch {
+            movies.value = withContext(Dispatchers.IO) {
+                repository.getMovieFromDb()
+            }
         }
     }
 }

@@ -39,7 +39,7 @@ class MoviesFragment : Fragment(), Observer<List<Movie>>, MenuItem.OnMenuItemCli
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = MoviesAdapter(requireContext()) { position -> Unit }
+        adapter = MoviesAdapter { position -> Unit }
         moviesList.adapter = adapter
     }
 
