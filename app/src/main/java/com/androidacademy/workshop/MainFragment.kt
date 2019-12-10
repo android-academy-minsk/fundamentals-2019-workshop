@@ -4,6 +4,7 @@ import android.location.Location
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_main.*
 
 
@@ -27,9 +28,9 @@ class MainFragment : Fragment(), MenuItem.OnMenuItemClickListener {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        locationManager = LocationManager(requireContext()) { location ->
+        LocationManager(requireContext()).observe(viewLifecycleOwner, Observer { location ->
             print(location)
-        }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
