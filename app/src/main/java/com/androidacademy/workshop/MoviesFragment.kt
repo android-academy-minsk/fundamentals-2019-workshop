@@ -13,12 +13,20 @@ import kotlinx.android.synthetic.main.activity_movies.*
 
 
 class MoviesFragment : Fragment(), Observer<List<Movie>>, MenuItem.OnMenuItemClickListener {
-    private lateinit var movieViewModel: MoviesViewModel
 
+    private lateinit var movieViewModel: MoviesViewModel
     private lateinit var adapter: MoviesAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setHasOptionsMenu(true)
+
+        val factory = MovieViewModelFactory(
+            Repository(MovieRoomDatabase.getDatabase(requireContext()))
+        )
+        movieViewModel = ViewModelProviders.of(requireActivity(), factory)
+            .get(MoviesViewModel::class.java)
     }
 
     override fun onCreateView(
